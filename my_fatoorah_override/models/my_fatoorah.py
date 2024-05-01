@@ -13,7 +13,7 @@ class overridesds(http.Controller):
         amount_total = 0
         payment_data = ast.literal_eval(data["data"])
         CustomerReference = payment_data.get("CustomerReference")
-
+        CustomerReference = CustomerReference[:CustomerReference.find('-')]
         if not CustomerReference:
             # Handle missing CustomerReference
             return request.render(template="myfatoorah_payment_gateway.myfatoorah_payment_gateway_form",
