@@ -38,3 +38,68 @@ class overridesds(http.Controller):
 
         return request.render(
             "myfatoorah_payment_gateway.myfatoorah_payment_gateway_form", vals)
+
+class PaymentTransaction1(models.Model):
+    """Inherited class of payment transaction to add MyFatoorah functions."""
+    _inherit = 'payment.transaction'
+
+    def send_payment(self):
+        """Send payment information to MyFatoorah for processing."""
+        base_api_url = self.env['payment.provider'].search([('code', '=', 'myfatoorah')])._myfatoorah_get_api_url()
+        api_url = f"{base_api_url}v2/SendPayment"
+        api_key = self.env['payment.provider'].search([('code', '=', 'myfatoorah')]).myfatoorah_token
+        odoo_base_url = self.env['ir.config_parameter'].get_param(
+            'web.base.url')
+        sale_order = self.env['payment.transaction'].search(
+            [('id', '=', self.id)]).sale_order_ids
+        MobileCountryCode = self.partner_id.country_id.phone_code
+        phone_number = self.partner_phone
+        if not phone_number:
+            raise ValueError("Please provide the phone number.")
+        else:
+            phone_number = phone_number.replace(str(MobileCountryCode), '')
+            if phone_number.startswith('+'):
+                phone_number = phone_number[1:]
+            elif not phone_number:
+                raise ValueError(
+                    "Please provide the phone number in proper format")
+        currency = self.env.company.currency_id.name
+        sendpay_data = {
+            "NotificationOption": "ALL",
+            "CustomerName": self.partner_name,
+            "DisplayCurrencyIso": currency,
+            "MobileCountryCode": MobileCountryCode,
+            "CustomerMobile": phone_number,
+            "CustomerEmail": self.partner_email,
+            "InvoiceValue": (self.amount),
+            "CallBackUrl": f"{odoo_base_url}/payment/myfatoorah/_return_url",
+            "ErrorUrl": f"{odoo_base_url}/payment/myfatoorah/failed",
+            "Language": "en",
+            "CustomerReference": self.reference,
+            "CustomerAddress": {
+                "Address": f'{self.partner_address} ,{self.partner_city} '
+                           f'{self.partner_zip} ,{self.partner_state_id.name} ,'
+                           f'{self.partner_country_id.name}',
+            },
+        }
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': f'Bearer {api_key}',
+        }
+        payload = json.dumps(sendpay_data)
+        response = requests.request("POST", api_url, headers=headers,
+                                    data=payload)
+        response_data = response.json()
+        if not response_data.get('IsSuccess'):
+            validation_errors = response_data.get('ValidationErrors')
+            if validation_errors:
+                error_message = validation_errors[0].get('Error')
+                raise ValidationError(f"{error_message}")
+        if response_data.get('Data')['InvoiceURL']:
+            payment_url = response_data.get('Data')['InvoiceURL']
+            sendpay_data['InvoiceURL'] = payment_url
+        return {
+            'api_url': f"{odoo_base_url}/payment/myfatoorah/response",
+            'data': sendpay_data,
+        }
