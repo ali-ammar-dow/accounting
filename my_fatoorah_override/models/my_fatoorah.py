@@ -6,6 +6,7 @@ import pprint
 from odoo import http
 from odoo.http import request
 import json
+import requests
 
 class overridesds(http.Controller):
     @http.route('/payment/myfatoorah/response', type='http', auth='public',
