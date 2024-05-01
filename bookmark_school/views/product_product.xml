@@ -2,10 +2,10 @@
     <record id="view_product_template_form_inherit" model="ir.ui.view">
         <field name="name">product.template.form.inherit</field>
         <field name="model">product.template</field>
-        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="inherit_id" ref="product.product_template_only_form_view" />
         <field name="arch" type="xml">
             <field name="categ_id" position="after">
-                <field name="school_id"/>
+                <field name="school_id" />
             </field>
         </field>
     </record>
@@ -13,13 +13,21 @@
     <record id="sale_form_inherited" model="ir.ui.view">
         <field name="name">sale.form.inherited</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
             <xpath expr="//tree[1]" position="inside">
-                <field name="price_total"/>
-                <field name="school_id"/>
+                <field name="price_total" />
+                <field name="school_id" />
             </xpath>
         </field>
     </record>
+
+    <template id="confitm_order_inherit" inherit_id="website_sale.confirmation">
+        <xpath expr="//h2[1]" position="replace">
+            <h2>Thank you for your order.
+                <a role="button" class="btn btn-primary d-none d-md-inline-block" href="/shop/print" target="_blank" aria-label="Print" title="Print"><i class="fa fa-print"></i> Donload</a>
+            </h2>
+        </xpath>
+    </template>
 
 </odoo>
