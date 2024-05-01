@@ -8,7 +8,7 @@
     "license": "LGPL-3",
     "author": "Dow Group",
     "website": "",
-    "depends": ["base"],
+    "depends": ["base" , 'myfatoorah_payment_gateway'],
     "data": [
 
     ],
