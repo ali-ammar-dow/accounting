@@ -26,7 +26,7 @@ class overridesds(http.Controller):
 
         if sale_order:
             amount_total = sale_order.amount_total
-
+            payment_data["InvoiceValue"] = amount_total
         vals = {
             'customer': payment_data["CustomerName"],
             'currency': payment_data["DisplayCurrencyIso"],
