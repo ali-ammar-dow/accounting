@@ -22,7 +22,7 @@ class overridesds(http.Controller):
                                 })
 
         # Search for sale.order based on CustomerReference
-        sale_order = request.env['sale.order'].search([('reference', '=', CustomerReference)], limit=1)
+        sale_order = request.env['sale.order'].search([('name', '=', CustomerReference)], limit=1)
 
         if sale_order:
             amount_total = sale_order.amount_total
