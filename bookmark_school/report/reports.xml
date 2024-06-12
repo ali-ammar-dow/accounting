@@ -26,7 +26,7 @@
                     <span t-field="line.product_template_id.public_categ_ids"/>
                 </td>
             </xpath>
-            <xpath expr="//div[@class='page'][1]" position="insdie">
+            <xpath expr="//div[@class='page'][1]" position="inside">
                 <div t-field="doc.preferred_delivery_date"/>
             </xpath>
             
