@@ -26,6 +26,9 @@
                     <span t-field="line.product_template_id.public_categ_ids"/>
                 </td>
             </xpath>
+            <xpath expr="//div[@class='page'][1]" position="insdie">
+                <div t-field="doc.preferred_delivery_date"/>
+            </xpath>
             
             <xpath expr="//t[1]/td[@name='td_subtotal']" position="replace">
                 <td t-if="not line.is_downpayment" name="td_subtotal" class="text-end o_price_total">
