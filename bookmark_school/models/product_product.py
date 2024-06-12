@@ -31,7 +31,7 @@ class MyModelSale(models.Model):
         for rec in self:
             msg = self.env['mail.message'].search([('model', '=', 'sale.order'),
                                                    ('res_id', '=', rec.id),
-                                                   ('sub_type', '=', self.env.ref('mail.mt_note').id),
+                                                   ('subtype_id', '=', self.env.ref('mail.mt_note').id),
                                                    ('body', 'ilike', 'Preferred Delivery Date')
                                                    ], limit=1)
             if msg:
