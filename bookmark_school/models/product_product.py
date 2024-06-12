@@ -19,6 +19,12 @@ class MyModelSale(models.Model):
 
     school_id = fields.Many2one(related="product_template_id.school_id")
 
+class MyModelSale(models.Model):
+    _inherit = 'product.public.category'
+
+    is_list = fields.Boolean('List')
+
+
 
 class MyModelSale(models.Model):
     _inherit = 'sale.order'

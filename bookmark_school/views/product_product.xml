@@ -28,4 +28,18 @@
         </field>
     </record>
 
+    <record id="ecommerce_cat_inherited" model="ir.ui.view">
+        <field name="name">ecommerce_cat_inherited</field>
+        <field name="model">product.public.category</field>
+        <field name="inherit_id" ref="website_sale.product_public_category_form_view"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='name']" position="after">
+                
+                <field name="is_list"/>
+            </xpath>
+
+        </field>
+    </record>
+    
 </odoo>
